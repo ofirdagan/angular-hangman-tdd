@@ -105,6 +105,16 @@ describe('Factory: game', function () {
     expect(game.state).toBe(gameState.won);
   }));
 
+  it('should change game status to won if player guessed the word ignoring case', inject(function (gameState) {
+    game.word = 'Test';
+    expect(game.state).toBe(gameState.playing);
+    game.revealLetter('t');
+    game.revealLetter('e');
+    expect(game.state).toBe(gameState.playing);
+    game.revealLetter('s');
+    expect(game.state).toBe(gameState.won);
+  }));
+
   it('should change game status to lost if player did not guessed the word within max strikes', inject(function (gameState, maxStrikes) {
     game.word = 'test';
     expect(game.state).toBe(gameState.playing);
@@ -129,4 +139,21 @@ describe('Factory: game', function () {
     game.revealLetter('a');
     expect(game.strikes).toBe(1);
   });
+
+  it('should not count strike for case difference', function () {
+    game.word = 'Big';
+    game.revealLetter('b');
+    expect(game.strikes).toBe(0);
+  });
+
+  it('should reset the game', inject(function (gameState, $rootScope) {
+    game.word = 'test';
+    game.strikes = 3;
+    game.state = gameState.lost;
+    var spy = jasmine.createSpy('resetSpy');
+    $rootScope.$on('resetGame', spy);
+    game.reset();
+    expect(spy).toHaveBeenCalled();
+  }));
+
 });

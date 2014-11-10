@@ -21,7 +21,9 @@
     "angular-i18n": "~1.2.0",
     "uri.js": "~1.13.1",
     "wix-angular": "~0.1.1",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "reset-css": "~2.0.20110126",
+    "mobile-angular-ui": "~1.1.0-beta.30"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

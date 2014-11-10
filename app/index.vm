@@ -38,6 +38,9 @@
     <meta name="robots" content="noindex, nofollow">
 
     <link rel="stylesheet" href="${staticBaseUrl}services/third-party/fonts/Helvetica/fontFace.css">
+    <link href="/bower_components/reset-css/reset.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css" />
+
     <!-- process-tags prefix('${staticsUrl}') -->
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
@@ -57,7 +60,7 @@
   <body>
     
     <!-- Add your site or application content here -->
-    <div class="container" ng-include="'views/main.html'"></div>
+    <div class="container" ng-include="'views/main.view.html'"></div>
     
 
     <!-- process-tags prefix('${staticsUrl}') -->
@@ -70,6 +73,7 @@
     <script src="bower_components/uri.js/src/URI.js"></script>
     <script src="bower_components/wix-angular/dist/wix-angular.js"></script>
     <script src="bower_components/lodash/dist/lodash.js"></script>
+    <script src="bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.js"></script>
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
@@ -77,7 +81,7 @@
     <script src="scripts/services/game.js"></script>
     <script src="scripts/services/hangman-api.js"></script>
     <script src="scripts/services/word-bank.js"></script>
-    <script src="scripts/directives/letter.js"></script>
+    <script src="scripts/directives/letter.directive.js"></script>
     <!-- endbuild --><!-- scripts -->
     <!-- end-process-tags -->
 

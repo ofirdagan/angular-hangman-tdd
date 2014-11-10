@@ -1,0 +1,19 @@
+.container {
+  margin: auto;
+  width: $page-width;
+}
+
+%text-center {
+  text-align: center;
+}
+
+.text-horizontal-center {
+  @extend %text-center;
+}
+
+.div-horizontal-center {
+  @extend %text-center;
+  @include position(absolute, nil, nil, nil, 50%);
+  @include translateX(-50%);
+}
+

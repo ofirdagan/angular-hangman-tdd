@@ -31,6 +31,7 @@ module.exports = function (config) {
       'app/bower_components/wix-angular/dist/wix-angular.js',
       'app/bower_components/es5-shim/es5-shim.js',
       'app/bower_components/lodash/dist/lodash.js',
+      'app/bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.js',
       '{app,.tmp}/*.js',
       '{app,.tmp}/scripts/*.js',
       '{app,.tmp}/scripts/*/**/*.js',

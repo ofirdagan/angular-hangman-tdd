@@ -19,7 +19,7 @@
           self.state = gameState.lost;
           return;
         }
-        var won = self.word.split('').every(function (char) {
+        var won = self.word.toLowerCase().split('').every(function (char) {
           return _(self.guessedLetters).contains(char);
         });
         if (won) {
@@ -36,11 +36,20 @@
           return;
         }
         self.guessedLetters.push(letter);
-        if (!self.word.match(letter)) {
+        if (!self.word.toLowerCase().match(letter)) {
           self.strikes++;
         }
         checkGameStatus();
         $rootScope.$broadcast('revealLetter', letter);
+      };
+
+      this.reset = function () {
+        wordBank.getNextWord(self.category).then(function (word) {
+          self.word = word;
+        });
+        self.strikes = 0;
+        self.state = gameState.playing;
+        $rootScope.$broadcast('resetGame');
       };
 
       hangmanApi.getCategories().then(function (categories) {

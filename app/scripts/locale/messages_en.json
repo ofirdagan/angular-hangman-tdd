@@ -1,3 +1,8 @@
 {
-  "title": "Angular Hangman"
+  "title": "Hangman",
+  "category": "Category:",
+  "categories_movies": "Movies",
+  "strikes": "Strikes:",
+  "game_over": "You {{status}}!",
+  "play_again": "Play Again"
 }

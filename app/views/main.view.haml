@@ -1,0 +1,15 @@
+.page-content{:"ng-controller" => "MainController as main"}
+  %h1.title.text-horizontal-center {{'title' | translate}}
+  .category {{'category' | translate}} {{'categories_' + main.game.category | translate}}
+  %section.hangman-draw
+  %section.word.text-horizontal-center
+    %letter{:"ng-repeat" => "letter in main.game.word.split('') track by $index", :value => "{{letter}}"}
+  %section.abc.text-horizontal-center
+    .char{:"ng-repeat" => "char in main.abc", :"ng-click" => "main.game.revealLetter(char)"} {{char}}
+  %section.actions
+  %section.stats
+    .strikes {{'strikes' | translate}} {{main.game.strikes + '/' + main.maxStrikes}}
+  %div{:"overlay" => "gameOverOverlay"}
+    %h4.overlay-title{:"translate" => 'game_over', :"translate-values" => '{status: main.game.state}'}
+    %p{:toggle => "off", :bubble => "true", :target => "gameOverOverlay"}
+      %span.btn.btn-primary{:"ng-click" => "main.game.reset()"} {{'play_again' | translate}}

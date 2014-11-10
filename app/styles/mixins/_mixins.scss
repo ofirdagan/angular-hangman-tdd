@@ -1,0 +1,28 @@
+////
+// Sets a value for a property only if value exists.
+// @param $property - the css property to be set
+// @param $value - a values for the property to be set to
+// @param $empty-value - (optional, default nil) definition for "empty value"
+//
+@mixin set-if-exists($property, $value, $empty-value: nil) {
+  @if ($value != $empty-value) {
+    #{$property}: $value;
+  }
+}
+
+
+////
+// Set postion and top/bottom/left/right values
+// @param $pisition - value for css `position` property
+// @param $top - value for css `top` property
+// @param $right - value for css `right` property
+// @param $bottom - value for css `bottom` property
+// @param $left - value for css `left` property
+//
+@mixin position($position: nil, $top: nil, $right: nil, $bottom: nil, $left: nil) {
+  @include set-if-exists(position, $position);
+  @include set-if-exists(top, $top);
+  @include set-if-exists(bottom, $bottom);
+  @include set-if-exists(right, $right);
+  @include set-if-exists(left, $left);
+}
