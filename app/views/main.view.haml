@@ -1,11 +1,16 @@
 .page-content{:"ng-controller" => "MainController as main"}
   %h1.title.text-horizontal-center {{'title' | translate}}
-  .category {{'category' | translate}} {{'categories_' + main.game.category | translate}}
+  .category {{'category' | translate}}
+  %select.category-select{:"ng-model" => "main.category",
+    :"ng-options" => "'categories_' + category | translate for category in main.game.categories track by category",
+    :"ng-change" => "main.onCategoryChanged()"}
   %section.hangman-draw
+    .hangman-svg{:"ng-include" => "'views/hangman.svg.preload.html'"}
   %section.word.text-horizontal-center
     %letter{:"ng-repeat" => "letter in main.game.word.split('') track by $index", :value => "{{letter}}"}
   %section.abc.text-horizontal-center
-    .char{:"ng-repeat" => "char in main.abc", :"ng-click" => "main.game.revealLetter(char)"} {{char}}
+    .char{:"ng-repeat" => "char in main.abc", :"ng-click" => "main.game.revealLetter(char)",
+      :"ng-class" => "{'guessed-char': main.game.alreadyGuessed(char)}"} {{char}}
   %section.actions
   %section.stats
     .strikes {{'strikes' | translate}} {{main.game.strikes + '/' + main.maxStrikes}}

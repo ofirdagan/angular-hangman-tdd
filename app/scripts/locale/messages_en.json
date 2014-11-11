@@ -1,8 +1,11 @@
 {
   "title": "Hangman",
   "category": "Category:",
-  "categories_movies": "Movies",
   "strikes": "Strikes:",
   "game_over": "You {{status}}!",
-  "play_again": "Play Again"
+  "play_again": "Play Again",
+  "categories_movies": "Movies",
+  "categories_countriesCapitals": "Countries Capitals",
+  "categories_cars": "Cars",
+  "categories_famousAustralians": "Famous Australians"
 }

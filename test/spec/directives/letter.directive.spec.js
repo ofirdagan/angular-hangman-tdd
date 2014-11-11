@@ -33,7 +33,13 @@ describe('Directive: letter', function () {
 
   it('should be revealed as when letter is a white space', inject(function () {
     compile(' ');
+    expect(element.isolateScope().isWhiteSpace).toBe(true);
     expect(element.isolateScope().isRevealed).toBe(true);
+  }));
+
+  it('should add white-space class when value is white space', inject(function () {
+    compile(' ');
+    expect(element.find('.white-space').length).toBe(1);
   }));
 
   it('should be revealed on revealLetter event with right value', inject(function () {

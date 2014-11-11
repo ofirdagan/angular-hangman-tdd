@@ -7,12 +7,17 @@
     function Game() {
       var self = this;
       var MAX_STRIKES = maxStrikes;
-      this.strikes = 0;
-      this.state = gameState.playing;
       this.abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-      this.guessedLetters = [];
       this.word = '';
       this.categories = [];
+
+      function resetFields() {
+        self.strikes = 0;
+        self.state = gameState.playing;
+        self.guessedLetters = [];
+      }
+
+      resetFields();
 
       function checkGameStatus() {
         if (self.strikes === MAX_STRIKES) {
@@ -27,12 +32,18 @@
         }
       }
 
-      function alreadyGuessed(letter) {
+      this.alreadyGuessed = function (letter) {
         return _(self.guessedLetters).contains(letter);
+      };
+
+      function getNewWord() {
+        wordBank.getNextWord(self.category).then(function (word) {
+          self.word = word;
+        });
       }
 
       this.revealLetter = function (letter) {
-        if (alreadyGuessed(letter)) {
+        if (self.alreadyGuessed(letter)) {
           return;
         }
         self.guessedLetters.push(letter);
@@ -44,20 +55,20 @@
       };
 
       this.reset = function () {
-        wordBank.getNextWord(self.category).then(function (word) {
-          self.word = word;
-        });
-        self.strikes = 0;
-        self.state = gameState.playing;
+        getNewWord();
+        resetFields();
         $rootScope.$broadcast('resetGame');
+      };
+
+      this.setCategory = function (category) {
+        self.category = category;
+        self.reset();
       };
 
       hangmanApi.getCategories().then(function (categories) {
         angular.copy(categories, self.categories);
         self.category = categories[0];
-        wordBank.getNextWord(self.category).then(function (word) {
-          self.word = word;
-        });
+        getNewWord();
       });
     }
     return Game;
@@ -70,6 +81,6 @@
       res[curr] = curr;
       return res;
     }, {}))
-    .constant('maxStrikes', 5);
+    .constant('maxStrikes', 8);
 
 })();

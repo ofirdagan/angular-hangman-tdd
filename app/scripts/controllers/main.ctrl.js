@@ -9,11 +9,24 @@
     this.maxStrikes = maxStrikes;
     var self = this;
 
+    this.onCategoryChanged = function () {
+      self.game.setCategory(self.category);
+    };
+
     $scope.$watch(function () {
       return self.game.state;
     }, function (newVal, oldVal) {
       if (newVal !== oldVal) {
         $rootScope.toggle('gameOverOverlay', 'on');
+      }
+    });
+
+    var unregister = $scope.$watch(function () {
+      return self.game.category;
+    }, function (newVal, oldVal) {
+      if (newVal !== oldVal && oldVal === undefined) {
+        self.category = newVal;
+        unregister();
       }
     });
   }

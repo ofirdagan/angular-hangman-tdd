@@ -50,4 +50,15 @@ describe('Controller: MainController', function () {
     expect($rootScope.toggle).toHaveBeenCalledWith('gameOverOverlay', 'on');
   }));
 
+  it('should change word on category change', inject(function () {
+    aController();
+    var spy = jasmine.createSpy('set category');
+    MainController.game.setCategory = spy;
+
+    MainController.category = 'yoba';
+    MainController.onCategoryChanged();
+
+    expect(MainController.game.setCategory).toHaveBeenCalledWith('yoba');
+  }));
+
 });

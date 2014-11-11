@@ -1,10 +1,33 @@
-.char {
+.category {
   display: inline-block;
-  margin-left: 10px;
 }
 
+.hangman-draw {
+  height: 210px;
+  .svg-draw {
+    pointer-events: none;
+    height: 610px;
+    position: absolute;
+    top: -90px;
+    left: 30px;
+  }
+}
+
+.char {
+  font-size: 20px;
+  display: inline-block;
+  margin: 10px;
+
+  &.guessed-char {
+    text-decoration: line-through;
+  }
+}
+
+.abc {
+  margin-top: 20px;
+}
 .stats {
   position: absolute;
   bottom: 0;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }

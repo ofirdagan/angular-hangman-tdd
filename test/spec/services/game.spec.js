@@ -57,6 +57,20 @@ describe('Factory: game', function () {
     expect(wordBank.getNextWord).toHaveBeenCalled();
   }));
 
+  it('should call getNext word on category change', inject(function () {
+    spyOn(game, 'reset').andCallThrough();
+
+    game.setCategory('yoba');
+
+    expect(game.reset).toHaveBeenCalled();
+  }));
+
+  it('should set category on category change', inject(function () {
+    game.category = 'olin';
+    game.setCategory('yoba');
+    expect(game.category).toBe('yoba');
+  }));
+
   it('should hold a word', inject(function (wordBank) {
     expect(wordBank.getNextWord).toHaveBeenCalledWith(game.category);
     expect(game.word).toBe('Edge of Tomorrow');
@@ -150,10 +164,15 @@ describe('Factory: game', function () {
     game.word = 'test';
     game.strikes = 3;
     game.state = gameState.lost;
+    game.guessedLetters = ['a'];
     var spy = jasmine.createSpy('resetSpy');
     $rootScope.$on('resetGame', spy);
-    game.reset();
-    expect(spy).toHaveBeenCalled();
-  }));
 
+    game.reset();
+
+    expect(game.state).toBe(gameState.playing);
+    expect(spy).toHaveBeenCalled();
+    expect(game.strikes).toBe(0);
+    expect(game.guessedLetters).toEqual([]);
+  }));
 });

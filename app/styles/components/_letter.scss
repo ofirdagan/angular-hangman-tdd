@@ -1,4 +1,9 @@
 letter {
   display: inline-block;
-  white-space: pre;
+  margin-left: 5px;
+
+  .white-space {
+    margin-left: 15px;
+  }
+
 }

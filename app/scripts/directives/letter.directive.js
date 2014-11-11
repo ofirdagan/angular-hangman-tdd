@@ -11,7 +11,8 @@
         value: '@'
       },
       link: function postLink(scope) {
-        scope.isRevealed = !scope.value || scope.value === ' ';
+        scope.isWhiteSpace = !scope.value || scope.value === ' ';
+        scope.isRevealed = scope.isWhiteSpace;
         scope.$on('revealLetter', function (args, letter) {
           scope.isRevealed = scope.isRevealed || letter.toLowerCase() === scope.value.toLowerCase();
         });

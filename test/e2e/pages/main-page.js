@@ -1,5 +1,7 @@
 'use strict';
 
+var Draw = require('../fragments/draw.js');
+
 function MainPage() {
   this.navigate = function () {
     browser.get('/');
@@ -10,7 +12,7 @@ function MainPage() {
   };
 
   this.getCurrentCategory = function () {
-    return $('.category').getText();
+    return $('.category-select option:checked').getText();
   };
 
   this.getCurrentStrikes = function () {
@@ -30,6 +32,17 @@ function MainPage() {
     return $$('.char').get(index);
   };
 
+  this.getCategories = function () {
+    return $('.category-select');
+  };
+
+  this.selectCategory = function (optionIndex) {
+    return $$('.category-select option').get(optionIndex);
+  };
+
+  this.getDraw = function () {
+    return new Draw();
+  };
 }
 
 module.exports = MainPage;
