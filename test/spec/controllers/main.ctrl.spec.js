@@ -35,12 +35,16 @@ describe('Controller: MainController', function () {
     expect(MainController.maxStrikes).toBe(maxStrikes);
   }));
 
-  it('should show overlay when game over', inject(function ($rootScope, gameState, hangmanApi) {
+  function fakeApi(hangmanApi) {
     hangmanApi.getCategories = function () {
       return {
         then: jasmine.createSpy()
       };
     };
+  }
+
+  it('should show overlay when game over', inject(function ($rootScope, gameState, hangmanApi) {
+    fakeApi(hangmanApi);
     aController();
     expect(MainController.game.state).toBe(gameState.playing);
     spyOn($rootScope, 'toggle').andCallThrough();
@@ -61,4 +65,17 @@ describe('Controller: MainController', function () {
     expect(MainController.game.setCategory).toHaveBeenCalledWith('yoba');
   }));
 
+  it('should set category when available from game', inject(function (hangmanApi) {
+    fakeApi(hangmanApi);
+    aController();
+
+    MainController.game.category = undefined;
+    scope.$digest();
+    expect(MainController.category).not.toBeDefined();
+
+    MainController.game.category = 'yoba';
+    scope.$digest();
+    expect(MainController.category).toBe('yoba');
+
+  }));
 });
