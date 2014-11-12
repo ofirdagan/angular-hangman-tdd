@@ -23,17 +23,16 @@ describe('Controller: MainController', function () {
         })
       }
     });
-    //add your mocks here
   });
 
-  var MainController, scope;
+  var scope;
 
   // Initialize the controller and a mock scope
   function aController() {
     var ctrl;
     inject(function ($controller, $rootScope) {
       scope = $rootScope.$new();
-      ctrl = MainController = $controller('MainController', {
+      ctrl = $controller('MainController', {
         $scope: scope
       });
     });
@@ -41,19 +40,19 @@ describe('Controller: MainController', function () {
   }
 
   it('should have an instance of a game', inject(function (Game) {
-    MainController = aController();
-    expect(MainController.game instanceof Game).toBe(true);
+    var mainController = aController();
+    expect(mainController.game instanceof Game).toBe(true);
   }));
 
   it('should have game\'s max strikes', inject(function (maxStrikes) {
-    aController();
-    expect(MainController.maxStrikes).toBe(maxStrikes);
+    var mainController = aController();
+    expect(mainController.maxStrikes).toBe(maxStrikes);
   }));
 
   it('should show overlay when game over', inject(function ($rootScope, gameState) {
-    aController();
+    var mainController = aController();
     $rootScope.$digest();
-    expect(MainController.game.state).toBe(gameState.playing);
+    expect(mainController.game.state).toBe(gameState.playing);
     spyOn($rootScope, 'toggle').andCallThrough();
     $rootScope.$digest();
     $rootScope.$broadcast('gameOver', gameState.lost);
@@ -62,8 +61,8 @@ describe('Controller: MainController', function () {
   }));
 
   it('should have first category as the default selected category', inject(function () {
-    aController();
-    expect(MainController.category).toBe('famousCats');
+    var mainController = aController();
+    expect(mainController.category).toBe('famousCats');
   }));
 
   it('should get next word from the wordBank', inject(function (wordBank) {
@@ -77,10 +76,10 @@ describe('Controller: MainController', function () {
   }));
 
   it('should call getNext word on category change', inject(function (wordBank) {
-    aController();
+    var mainController = aController();
     expect(wordBank.getNextWord).toHaveBeenCalledOnce();
 
-    MainController.onCategoryChanged();
+    mainController.onCategoryChanged();
 
     expect(wordBank.getNextWord.calls.length).toBe(2);
   }));

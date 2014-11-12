@@ -38,9 +38,7 @@ describe('Service: wordBank', function () {
     var wasHereSpy = jasmine.createSpy('washere');
     wordBank.getNextWord(category).then(function (randomWord) {
       wasHereSpy();
-      expect(wordsMock.some(function (word) {
-        return word === randomWord;
-      })).toBe(true);
+      expect(wordsMock.indexOf(randomWord) !== -1).toBe(true);
     });
     $rootScope.$digest();
     expect(wasHereSpy).toHaveBeenCalled();
@@ -57,9 +55,7 @@ describe('Service: wordBank', function () {
     var wasHereSpy = jasmine.createSpy('washere');
     wordBank.getNextWord(category).then(function (randomWord) {
       wasHereSpy();
-      expect(wordsMock.some(function (word) {
-        return word === randomWord;
-      })).toBe(true);
+      expect(wordsMock.indexOf(randomWord) !== -1).toBe(true);
     });
     $rootScope.$digest();
 

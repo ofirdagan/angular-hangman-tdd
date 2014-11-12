@@ -11,7 +11,6 @@
 
       this.abc = 'abcdefghijklmnopqrstuvwxyz'.split('');
       this.word = word;
-      this.categories = [];
       this.strikes = 0;
       this.state = gameState.playing;
 
