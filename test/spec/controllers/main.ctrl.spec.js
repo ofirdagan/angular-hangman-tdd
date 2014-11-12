@@ -27,11 +27,6 @@ describe('Controller: MainController', function () {
     expect(MainController.game instanceof Game).toBe(true);
   }));
 
-  it('should have game\'s abc', inject(function () {
-    aController();
-    expect(MainController.abc).toBe(MainController.game.abc);
-  }));
-
   it('should have game\'s max strikes', inject(function (maxStrikes) {
     aController();
     expect(MainController.maxStrikes).toBe(maxStrikes);

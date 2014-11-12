@@ -9,7 +9,7 @@
   %section.word.text-horizontal-center
     %letter{:"ng-repeat" => "letter in main.game.word.split('') track by $index", :value => "{{letter}}"}
   %section.abc.text-horizontal-center
-    .char{:"ng-repeat" => "char in main.abc", :"ng-click" => "main.game.revealLetter(char)",
+    .char{:"ng-repeat" => "char in main.game.abc", :"ng-click" => "main.game.revealLetter(char)",
       :"ng-class" => "{'guessed-char': main.game.alreadyGuessed(char)}"} {{char}}
   %section.actions
   %section.stats

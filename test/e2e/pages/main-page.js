@@ -20,15 +20,13 @@ function MainPage() {
   };
 
   this.getGuess = function () {
-    return $$('letter .text').reduce(function (acc, letter) {
-      return letter.getText().then(function (text) {
-        return acc += text;
-      });
-    }, '');
+    return $('.word').getText().then(function (text) {
+      return text.replace(/(\r\n|\n|\r)/gm, '');
+    });
   };
 
   this.getChar = function (char) {
-    var index = char.charCodeAt() - 97;
+    var index = char.charCodeAt() - 'a'.charCodeAt();
     return $$('.char').get(index);
   };
 

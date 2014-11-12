@@ -65,7 +65,7 @@ describe('Service: wordBank', function () {
 
     //make sure the word got from the cache and not from the server.
     expect(wasHereSpy).toHaveBeenCalled();
-    expect(hangmanApi.getWordsInCategory.calls.length).toBe(1);
+    expect(hangmanApi.getWordsInCategory).toHaveBeenCalledOnce();
 
   }));
 
@@ -98,11 +98,14 @@ describe('Service: wordBank', function () {
       lastWord = randomWord;
     }
 
-    for (var i = 0; i < wordsMock.length * 3; i++) {
-      wordBank.getNextWord().then(onWordDrawn);
-      $rootScope.$digest();
-    }
-
-    expect(wasHereSpy.calls.length).toBe(wordsMock.length * 3);
+    _(200).times(function () {
+      wordsMock.forEach(function () {
+        wordBank.getNextWord().then(onWordDrawn);
+        $rootScope.$digest();
+      });
+      lastWord = undefined;
+      expect(wasHereSpy.calls.length).toBe(wordsMock.length);
+      wasHereSpy.reset();
+    });
   }));
 });

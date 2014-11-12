@@ -75,9 +75,9 @@
   angular
     .module('hangmanAppInternal')
     .factory('Game', gameFactory)
-    .constant('gameState', ['playing', 'won', 'lost'].reduce(function (res, curr) {
-      res[curr] = curr;
-      return res;
+    .constant('gameState', ['playing', 'won', 'lost'].reduce(function (acc, current) {
+      acc[current] = current;
+      return acc;
     }, {}))
     .constant('maxStrikes', 8);
 
