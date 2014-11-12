@@ -9,11 +9,15 @@
 
     function getMaxIndexForCategory(category) {
       var totalWordsInCategory = wordBank[category].length;
+      if (totalWordsInCategory === usedWordsCountByCategory[category]) {
+        usedWordsCountByCategory[category] = 0;
+      }
       return totalWordsInCategory - 1 - usedWordsCountByCategory[category];
     }
 
     function drawRandomWord(category) {
-      var index = _.random(getMaxIndexForCategory(category));
+      var maxIndexForCategory = getMaxIndexForCategory(category);
+      var index = _.random(maxIndexForCategory);
       var word = wordBank[category].splice(index, 1)[0];
       wordBank[category].push(word);
       usedWordsCountByCategory[category]++;

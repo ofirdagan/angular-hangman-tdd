@@ -12,16 +12,18 @@ describe('Controller: MainController', function () {
 
   // Initialize the controller and a mock scope
   function aController() {
+    var ctrl;
     inject(function ($controller, $rootScope) {
       scope = $rootScope.$new();
-      MainController = $controller('MainController', {
+      ctrl = MainController = $controller('MainController', {
         $scope: scope
       });
     });
+    return ctrl;
   }
 
   it('should have an instance of a game', inject(function (Game) {
-    aController();
+    MainController = aController();
     expect(MainController.game instanceof Game).toBe(true);
   }));
 

@@ -25,17 +25,18 @@ describe('hangmanApp Main Page', function () {
     expect(mainPage.getCurrentCategory()).toEqual('Movies');
   });
 
-  it('should be able to replace categories', function () {
-    browser.addMockModule('hangmanAppMocks', function () {
+  it('should change word after replacing the category', function () {
+    var firstWord = 'first';
+    browser.addMockModule('hangmanAppMocks', function (firstWord) {
       angular.module('hangmanAppMocks').run(function (serverMockLogic) {
         serverMockLogic.getWordsForCategory = function (category) {
-          return category === 'movies' ? ['first'] : ['second word'];
+          return category === 'movies' ? [firstWord] : ['second word'];
         };
       });
-    });
+    }, firstWord);
 
     mainPage.navigate();
-    expect(mainPage.getGuess()).toBe('_____');
+    expect(mainPage.getGuess()).toBe(firstWord.replace(/./g, '_'));
 
     mainPage.getCategories().click();
     mainPage.selectCategory(1).click();
@@ -43,7 +44,7 @@ describe('hangmanApp Main Page', function () {
     expect(mainPage.getGuess()).toBe('__________');
   });
 
-  it('should change word after replacing the category', function () {
+  it('should be able to replace categories', function () {
     mainPage.navigate();
     mainPage.getCategories().click();
     mainPage.selectCategory(1).click();
@@ -93,6 +94,12 @@ describe('hangmanApp Main Page', function () {
 
       mainPage.getChar('f').click();
       expect(mainPage.getDraw().getVisibleStrikes()).toBe(2);
+    });
+
+    it('should add class on guessed letters', function () {
+      mainPage.getChar('z').click();
+
+      expect(mainPage.getChar('z')).toHaveClass('guessed-char');
     });
   });
 });

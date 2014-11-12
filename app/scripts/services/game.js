@@ -16,10 +16,9 @@
         self.state = gameState.playing;
         self.guessedLetters = [];
       }
-
       resetFields();
 
-      function checkGameStatus() {
+      function checkAndUpdateGameStatus() {
         if (self.strikes === MAX_STRIKES) {
           self.state = gameState.lost;
           return;
@@ -32,15 +31,15 @@
         }
       }
 
-      this.alreadyGuessed = function (letter) {
-        return _(self.guessedLetters).contains(letter);
-      };
-
       function getNewWord() {
         wordBank.getNextWord(self.category).then(function (word) {
           self.word = word;
         });
       }
+
+      this.alreadyGuessed = function (letter) {
+        return _(self.guessedLetters).contains(letter);
+      };
 
       this.revealLetter = function (letter) {
         if (self.alreadyGuessed(letter)) {
@@ -50,7 +49,7 @@
         if (!self.word.toLowerCase().match(letter)) {
           self.strikes++;
         }
-        checkGameStatus();
+        checkAndUpdateGameStatus();
         $rootScope.$broadcast('revealLetter', letter);
       };
 
@@ -67,8 +66,7 @@
 
       hangmanApi.getCategories().then(function (categories) {
         angular.copy(categories, self.categories);
-        self.category = categories[0];
-        getNewWord();
+        self.setCategory(categories[0]);
       });
     }
     return Game;

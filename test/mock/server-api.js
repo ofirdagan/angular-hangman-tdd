@@ -7,7 +7,7 @@ angular.module('hangmanAppMocks', ['ngMockE2E'])
       countriesCapitals: ['Jerusalem', 'Paris'],
       cars: ['BMW', 'OPEL', 'KIA'],
       famousAustralians: ['Crocodile Dandi'],
-      movies: ['Big', 'wonda']
+      movies: ['Big', 'Seven', 'Blue']
     };
     this.getCategories = function () {
       return categories;

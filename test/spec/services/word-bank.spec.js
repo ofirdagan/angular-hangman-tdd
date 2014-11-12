@@ -87,4 +87,22 @@ describe('Service: wordBank', function () {
 
     expect(wasHereSpy.calls.length).toBe(wordsMock.length);
   }));
+
+  it('should reset random index in case all of the words have been drawn', inject(function ($rootScope) {
+    var lastWord;
+    var wasHereSpy = jasmine.createSpy('washere');
+
+    function onWordDrawn(randomWord) {
+      wasHereSpy();
+      expect(lastWord).not.toEqual(randomWord);
+      lastWord = randomWord;
+    }
+
+    for (var i = 0; i < wordsMock.length * 3; i++) {
+      wordBank.getNextWord().then(onWordDrawn);
+      $rootScope.$digest();
+    }
+
+    expect(wasHereSpy.calls.length).toBe(wordsMock.length * 3);
+  }));
 });
