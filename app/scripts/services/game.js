@@ -3,71 +3,49 @@
 (function () {
 
   /* @ngInject */
-  function gameFactory(gameState, wordBank, hangmanApi, $rootScope, maxStrikes) {
-    function Game() {
+  function gameFactory(gameState, $rootScope, maxStrikes) {
+    function Game(word) {
       var self = this;
+      var guessedLetters = [];
       var MAX_STRIKES = maxStrikes;
-      this.abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-      this.word = '';
-      this.categories = [];
 
-      function resetFields() {
-        self.strikes = 0;
-        self.state = gameState.playing;
-        self.guessedLetters = [];
-      }
-      resetFields();
+      this.abc = 'abcdefghijklmnopqrstuvwxyz'.split('');
+      this.word = word;
+      this.categories = [];
+      this.strikes = 0;
+      this.state = gameState.playing;
 
       function checkAndUpdateGameStatus() {
         if (self.strikes === MAX_STRIKES) {
           self.state = gameState.lost;
-          return;
+        } else {
+          var won = self.word.toLowerCase().replace(/\s/g, '').split('').every(function (char) {
+            return _(guessedLetters).contains(char);
+          });
+          if (won) {
+            self.state = gameState.won;
+          }
         }
-        var won = self.word.toLowerCase().split('').every(function (char) {
-          return _(self.guessedLetters).contains(char);
-        });
-        if (won) {
-          self.state = gameState.won;
+        if (self.state !== gameState.playing) {
+          $rootScope.$broadcast('gameOver', self.state);
         }
-      }
-
-      function getNewWord() {
-        wordBank.getNextWord(self.category).then(function (word) {
-          self.word = word;
-        });
       }
 
       this.alreadyGuessed = function (letter) {
-        return _(self.guessedLetters).contains(letter);
+        return _(guessedLetters).contains(letter);
       };
 
       this.revealLetter = function (letter) {
         if (self.alreadyGuessed(letter)) {
           return;
         }
-        self.guessedLetters.push(letter);
+        guessedLetters.push(letter);
         if (!self.word.toLowerCase().match(letter)) {
           self.strikes++;
         }
         checkAndUpdateGameStatus();
         $rootScope.$broadcast('revealLetter', letter);
       };
-
-      this.reset = function () {
-        getNewWord();
-        resetFields();
-        $rootScope.$broadcast('resetGame');
-      };
-
-      this.setCategory = function (category) {
-        self.category = category;
-        self.reset();
-      };
-
-      hangmanApi.getCategories().then(function (categories) {
-        angular.copy(categories, self.categories);
-        self.setCategory(categories[0]);
-      });
     }
     return Game;
   }

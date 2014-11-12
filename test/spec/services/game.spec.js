@@ -27,76 +27,53 @@ describe('Factory: game', function () {
     });
   });
 
-  // instantiate service
-  var game;
-  beforeEach(inject(function (Game) {
-    game = new Game();
-  }));
+  function aGame(word) {
+    var game;
+    word = word || 'Edge of Tomorrow';
+    inject(function (Game) {
+      game = new Game(word);
+    });
+    return game;
+  }
 
   it('should be defined', function () {
-    expect(game).toBeDefined();
+    expect(aGame()).toBeDefined();
   });
 
   it('a new game should have 0 strikes', function () {
-    expect(game.strikes).toBe(0);
+    expect(aGame().strikes).toBe(0);
   });
 
   it('should start with \'playing\' state ', inject(function (gameState) {
-    expect(game.state).toBe(gameState.playing);
+    expect(aGame().state).toBe(gameState.playing);
   }));
 
-  it('should have first category as the default selected category', inject(function () {
-    expect(game.category).toBe('famousCats');
-  }));
-
-  it('should get categories list from api service', inject(function (hangmanApi) {
-    expect(hangmanApi.getCategories).toHaveBeenCalled();
-  }));
-
-  it('should get next word from the wordBank', inject(function (wordBank) {
-    expect(wordBank.getNextWord).toHaveBeenCalled();
-  }));
-
-  it('should call getNext word on category change', inject(function () {
-    spyOn(game, 'reset').andCallThrough();
-
-    game.setCategory('yoba');
-
-    expect(game.reset).toHaveBeenCalled();
-  }));
-
-  it('should set category on category change', inject(function () {
-    game.category = 'olin';
-    game.setCategory('yoba');
-    expect(game.category).toBe('yoba');
-  }));
-
-  it('should hold a word', inject(function (wordBank) {
-    expect(wordBank.getNextWord).toHaveBeenCalledWith(game.category);
-    expect(game.word).toBe('Edge of Tomorrow');
+  it('should hold a word', inject(function () {
+    expect(aGame('Edge').word).toBe('Edge');
   }));
 
   it('should hold the abc', function () {
-    expect(game.abc).toEqual(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']);
+    expect(aGame().abc).toEqual(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']);
   });
 
   it('should broadcast the letter that was pressed', inject(function ($rootScope) {
     var revealLetter = jasmine.createSpy('revealLetterSpy');
     $rootScope.$on('revealLetter', revealLetter);
 
-    game.revealLetter('a');
+    aGame().revealLetter('a');
 
     expect(revealLetter).toHaveBeenCalledWith(jasmine.any(Object), 'a');
   }));
 
   it('should hold the guessed letters', function () {
-    expect(game.guessedLetters).toEqual([]);
+    var game = aGame();
+    expect(game.alreadyGuessed('a')).toBe(false);
     game.revealLetter('a');
-    expect(game.guessedLetters).toEqual(['a']);
+    expect(game.alreadyGuessed('a')).toBe(true);
   });
 
   it('should count strikes', function () {
-    game.word = 'test secret';
+    var game = aGame('test secret');
     expect(game.strikes).toBe(0);
 
     game.revealLetter('a');
@@ -110,17 +87,18 @@ describe('Factory: game', function () {
   });
 
   it('should change game status to won if player guessed the word', inject(function (gameState) {
-    game.word = 'test';
+    var game = aGame('test a');
     expect(game.state).toBe(gameState.playing);
     game.revealLetter('t');
     game.revealLetter('e');
     expect(game.state).toBe(gameState.playing);
     game.revealLetter('s');
+    game.revealLetter('a');
     expect(game.state).toBe(gameState.won);
   }));
 
   it('should change game status to won if player guessed the word ignoring case', inject(function (gameState) {
-    game.word = 'Test';
+    var game = aGame('Test');
     expect(game.state).toBe(gameState.playing);
     game.revealLetter('t');
     game.revealLetter('e');
@@ -129,8 +107,10 @@ describe('Factory: game', function () {
     expect(game.state).toBe(gameState.won);
   }));
 
-  it('should change game status to lost if player did not guessed the word within max strikes', inject(function (gameState, maxStrikes) {
-    game.word = 'test';
+  it('should change game status to lost if player did not guessed the word within max strikes', inject(function (gameState, maxStrikes, $rootScope) {
+    var game = aGame('test');
+    var gameOverSpy = jasmine.createSpy('game over spy');
+    $rootScope.$on('gameOver', gameOverSpy);
     expect(game.state).toBe(gameState.playing);
     expect(maxStrikes).toBe(5);
 
@@ -143,11 +123,13 @@ describe('Factory: game', function () {
     game.revealLetter('d');
     expect(game.state).toBe(gameState.playing);
     game.revealLetter('r');
+
     expect(game.state).toBe(gameState.lost);
+    expect(gameOverSpy).toHaveBeenCalledWith(jasmine.any(Object), 'lost');
   }));
 
   it('should not count strike twice for the same letter', function () {
-    game.word = 'test';
+    var game = aGame('test');
     game.revealLetter('a');
     expect(game.strikes).toBe(1);
     game.revealLetter('a');
@@ -155,24 +137,8 @@ describe('Factory: game', function () {
   });
 
   it('should not count strike for case difference', function () {
-    game.word = 'Big';
+    var game = aGame('Big');
     game.revealLetter('b');
     expect(game.strikes).toBe(0);
   });
-
-  it('should reset the game', inject(function (gameState, $rootScope) {
-    game.word = 'test';
-    game.strikes = 3;
-    game.state = gameState.lost;
-    game.guessedLetters = ['a'];
-    var spy = jasmine.createSpy('resetSpy');
-    $rootScope.$on('resetGame', spy);
-
-    game.reset();
-
-    expect(game.state).toBe(gameState.playing);
-    expect(spy).toHaveBeenCalled();
-    expect(game.strikes).toBe(0);
-    expect(game.guessedLetters).toEqual([]);
-  }));
 });

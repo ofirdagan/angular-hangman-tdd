@@ -5,6 +5,24 @@ describe('Controller: MainController', function () {
   // load the controller's module
   beforeEach(function () {
     module('hangmanAppInternal');
+    module({
+      hangmanApi: {
+        getCategories: jasmine.createSpy('getCategories').andReturn({
+          then: function (callback) {
+            callback(['famousCats', 'countriesCapitals']);
+          }
+        })
+      },
+      wordBank: {
+        getNextWord: jasmine.createSpy('getNextWord').andCallFake(function () {
+          return {
+            then: function (callback) {
+              callback('Edge of Tomorrow');
+            }
+          };
+        })
+      }
+    });
     //add your mocks here
   });
 
@@ -32,47 +50,39 @@ describe('Controller: MainController', function () {
     expect(MainController.maxStrikes).toBe(maxStrikes);
   }));
 
-  function fakeApi(hangmanApi) {
-    hangmanApi.getCategories = function () {
-      return {
-        then: jasmine.createSpy()
-      };
-    };
-  }
-
-  it('should show overlay when game over', inject(function ($rootScope, gameState, hangmanApi) {
-    fakeApi(hangmanApi);
+  it('should show overlay when game over', inject(function ($rootScope, gameState) {
     aController();
+    $rootScope.$digest();
     expect(MainController.game.state).toBe(gameState.playing);
     spyOn($rootScope, 'toggle').andCallThrough();
     $rootScope.$digest();
-    MainController.game.state = gameState.lost;
+    $rootScope.$broadcast('gameOver', gameState.lost);
     $rootScope.$digest();
     expect($rootScope.toggle).toHaveBeenCalledWith('gameOverOverlay', 'on');
   }));
 
-  it('should change word on category change', inject(function () {
+  it('should have first category as the default selected category', inject(function () {
     aController();
-    var spy = jasmine.createSpy('set category');
-    MainController.game.setCategory = spy;
+    expect(MainController.category).toBe('famousCats');
+  }));
 
-    MainController.category = 'yoba';
+  it('should get next word from the wordBank', inject(function (wordBank) {
+    aController();
+    expect(wordBank.getNextWord).toHaveBeenCalled();
+  }));
+
+  it('should get categories list from api service', inject(function (hangmanApi) {
+    aController();
+    expect(hangmanApi.getCategories).toHaveBeenCalled();
+  }));
+
+  it('should call getNext word on category change', inject(function (wordBank) {
+    aController();
+    expect(wordBank.getNextWord).toHaveBeenCalledOnce();
+
     MainController.onCategoryChanged();
 
-    expect(MainController.game.setCategory).toHaveBeenCalledWith('yoba');
+    expect(wordBank.getNextWord.calls.length).toBe(2);
   }));
 
-  it('should set category when available from game', inject(function (hangmanApi) {
-    fakeApi(hangmanApi);
-    aController();
-
-    MainController.game.category = undefined;
-    scope.$digest();
-    expect(MainController.category).not.toBeDefined();
-
-    MainController.game.category = 'yoba';
-    scope.$digest();
-    expect(MainController.category).toBe('yoba');
-
-  }));
 });

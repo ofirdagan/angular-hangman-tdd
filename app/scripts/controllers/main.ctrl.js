@@ -3,31 +3,28 @@
 (function () {
 
   /* @ngInject */
-  function MainController(Game, maxStrikes, $scope, $rootScope) {
-    this.game = new Game();
+  function MainController(Game, maxStrikes, $scope, $rootScope, hangmanApi, wordBank) {
+
     this.maxStrikes = maxStrikes;
+    this.categories = [];
     var self = this;
 
     this.onCategoryChanged = function () {
-      self.game.setCategory(self.category);
+      wordBank.getNextWord(self.category).then(function (word) {
+        self.game = new Game(word);
+      });
     };
 
-    $scope.$watch(function () {
-      return self.game.state;
-    }, function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        $rootScope.toggle('gameOverOverlay', 'on');
-      }
+    $scope.$on('gameOver', function () {
+      $rootScope.toggle('gameOverOverlay', 'on');
     });
 
-    var unregister = $scope.$watch(function () {
-      return self.game.category;
-    }, function (newVal, oldVal) {
-      if (newVal !== oldVal && oldVal === undefined) {
-        self.category = newVal;
-        unregister();
-      }
+    hangmanApi.getCategories().then(function (categories) {
+      angular.copy(categories, self.categories);
+      self.category = categories[0];
+      self.onCategoryChanged();
     });
+
   }
 
   angular
