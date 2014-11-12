@@ -7,8 +7,8 @@
     function Game() {
       var self = this;
       var MAX_STRIKES = maxStrikes;
-      this.abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
       this.word = '';
+      this.abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
       this.categories = [];
 
       function resetFields() {
@@ -23,7 +23,7 @@
           self.state = gameState.lost;
           return;
         }
-        var won = self.word.toLowerCase().split('').every(function (char) {
+        var won = self.word.split('').every(function (char) {
           return _(self.guessedLetters).contains(char);
         });
         if (won) {
@@ -33,7 +33,7 @@
 
       function getNewWord() {
         wordBank.getNextWord(self.category).then(function (word) {
-          self.word = word;
+          self.word = word.toLowerCase();
         });
       }
 
@@ -46,7 +46,7 @@
           return;
         }
         self.guessedLetters.push(letter);
-        if (!self.word.toLowerCase().match(letter)) {
+        if (!self.word.match(letter)) {
           self.strikes++;
         }
         checkAndUpdateGameStatus();

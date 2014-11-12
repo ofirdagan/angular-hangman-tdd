@@ -72,20 +72,15 @@ describe('Service: wordBank', function () {
   it('should not return same word twice', inject(function ($rootScope) {
     var category = 'movies';
     var usedWords = [];
-    var wasHereSpy = jasmine.createSpy('washere');
 
-    function onWordDrawn(randomWord) {
-      wasHereSpy();
-      expect(_(usedWords).contains(randomWord)).toBe(false);
-      usedWords.push(randomWord);
-    }
-
-    for (var i = 0; i < wordsMock.length; i++) {
-      wordBank.getNextWord(category).then(onWordDrawn);
+    wordsMock.forEach(function () {
+      wordBank.getNextWord(category).then(function onWordDrawn(randomWord) {
+        usedWords.push(randomWord);
+      });
       $rootScope.$digest();
-    }
+    });
 
-    expect(wasHereSpy.calls.length).toBe(wordsMock.length);
+    expect(wordsMock.sort()).toEqual(usedWords.sort());
   }));
 
   it('should reset random index in case all of the words have been drawn', inject(function ($rootScope) {
@@ -98,11 +93,15 @@ describe('Service: wordBank', function () {
       lastWord = randomWord;
     }
 
-    for (var i = 0; i < wordsMock.length * 3; i++) {
-      wordBank.getNextWord().then(onWordDrawn);
-      $rootScope.$digest();
-    }
+    _(300).times(function () {
+      wordsMock.forEach(function () {
+        wordBank.getNextWord().then(onWordDrawn);
+        $rootScope.$digest();
+      });
+      lastWord = undefined;
+      expect(wasHereSpy.calls.length).toBe(wordsMock.length);
+      wasHereSpy.reset();
+    });
 
-    expect(wasHereSpy.calls.length).toBe(wordsMock.length * 3);
   }));
 });

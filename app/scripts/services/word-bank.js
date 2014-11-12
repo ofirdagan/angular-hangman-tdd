@@ -4,30 +4,22 @@
 
   /* @ngInject */
   function WordBank(hangmanApi, $q) {
-    var usedWordsCountByCategory = {};
+    var availableWords = {};
     var wordBank = {};
 
-    function getMaxIndexForCategory(category) {
-      var totalWordsInCategory = wordBank[category].length;
-      if (totalWordsInCategory === usedWordsCountByCategory[category]) {
-        usedWordsCountByCategory[category] = 0;
-      }
-      return totalWordsInCategory - 1 - usedWordsCountByCategory[category];
-    }
-
     function drawRandomWord(category) {
-      var maxIndexForCategory = getMaxIndexForCategory(category);
-      var index = _.random(maxIndexForCategory);
-      var word = wordBank[category].splice(index, 1)[0];
-      wordBank[category].push(word);
-      usedWordsCountByCategory[category]++;
+      if (availableWords[category].length === 0) {
+        availableWords[category] = angular.copy(wordBank[category]);
+      }
+      var index = _.random(availableWords[category].length - 1);
+      var word = availableWords[category].splice(index, 1)[0];
       return word;
     }
 
     function getWordsInCategory(category) {
       return hangmanApi.getWordsInCategory(category).then(function (words) {
         wordBank[category] = words;
-        usedWordsCountByCategory[category] = 0;
+        availableWords[category] = [];
         return;
       });
     }
