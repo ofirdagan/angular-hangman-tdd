@@ -84,4 +84,12 @@ describe('Controller: MainController', function () {
     expect(wordBank.getNextWord.calls.length).toBe(2);
   }));
 
+  it('should broadcast event on category change', inject(function (wordBank, $rootScope) {
+    var mainController = aController();
+    var eventSpy = jasmine.createSpy('category change event spy');
+    $rootScope.$on('categoryChanged', eventSpy);
+    mainController.onCategoryChanged();
+    expect(eventSpy).toHaveBeenCalled();
+  }));
+
 });

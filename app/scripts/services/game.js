@@ -4,13 +4,13 @@
 
   /* @ngInject */
   function gameFactory(gameState, $rootScope, maxStrikes) {
-    function Game(word) {
+    function Game(pharse) {
       var self = this;
       var guessedLetters = [];
       var MAX_STRIKES = maxStrikes;
+      var word = pharse;
 
       this.abc = 'abcdefghijklmnopqrstuvwxyz'.split('');
-      this.word = word;
       this.strikes = 0;
       this.state = gameState.playing;
 
@@ -18,7 +18,7 @@
         if (self.strikes === MAX_STRIKES) {
           self.state = gameState.lost;
         } else {
-          var won = self.word.toLowerCase().replace(/\s/g, '').split('').every(function (char) {
+          var won = word.toLowerCase().replace(/\s/g, '').split('').every(function (char) {
             return _(guessedLetters).contains(char);
           });
           if (won) {
@@ -30,6 +30,17 @@
         }
       }
 
+      this.getPhrase = function () {
+        if (self.phrase) {
+          return self.phrase;
+        }
+        self.phrase = word.split('').reduce(function (acc, letter) {
+          acc.push({val: letter});
+          return acc;
+        }, []);
+        return self.phrase;
+      };
+
       this.alreadyGuessed = function (letter) {
         return _(guessedLetters).contains(letter);
       };
@@ -39,7 +50,7 @@
           return;
         }
         guessedLetters.push(letter);
-        if (!self.word.toLowerCase().match(letter)) {
+        if (!word.toLowerCase().match(letter)) {
           self.strikes++;
         }
         checkAndUpdateGameStatus();

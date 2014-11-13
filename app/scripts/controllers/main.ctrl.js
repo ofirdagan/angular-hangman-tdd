@@ -9,10 +9,15 @@
     this.categories = [];
     var self = this;
 
-    this.onCategoryChanged = function () {
+    this.createNewGame = function () {
       wordBank.getNextWord(self.category).then(function (word) {
         self.game = new Game(word);
       });
+    };
+
+    this.onCategoryChanged = function () {
+      $rootScope.$broadcast('categoryChanged');
+      self.createNewGame();
     };
 
     $scope.$on('gameOver', function () {

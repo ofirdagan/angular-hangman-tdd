@@ -2,6 +2,7 @@
 
 require('../lib/matchers.protractor.js');
 var MainPage = require('../pages/main-page.js');
+var GameOverModal = require('../modals/game-over-modal.js');
 
 describe('hangmanApp Main Page', function () {
   var mainPage;
@@ -100,6 +101,56 @@ describe('hangmanApp Main Page', function () {
       mainPage.getChar('z').click();
 
       expect(mainPage.getChar('z')).toHaveClass('guessed-char');
+    });
+
+    it('should win a game', function () {
+      mainPage.getChar('t').click();
+      mainPage.getChar('w').click();
+      mainPage.getChar('r').click();
+      mainPage.getChar('a').click();
+      mainPage.getChar('d').click();
+      mainPage.getChar('e').click();
+      mainPage.getChar('s').click();
+      mainPage.getChar('o').click();
+
+      var modal = new GameOverModal();
+      expect(modal.getText()).toBe('You won!');
+    });
+
+    it('should lose a game', function () {
+      mainPage.getChar('a').click();
+      mainPage.getChar('b').click();
+      mainPage.getChar('c').click();
+      mainPage.getChar('d').click();
+      mainPage.getChar('e').click();
+      mainPage.getChar('f').click();
+      mainPage.getChar('g').click();
+      mainPage.getChar('h').click();
+      mainPage.getChar('i').click();
+      mainPage.getChar('j').click();
+      mainPage.getChar('k').click();
+      var modal = new GameOverModal();
+      expect(modal.getText()).toBe('You lost!');
+    });
+
+    it('should start a new game after game is over', function () {
+      mainPage.getChar('a').click();
+      mainPage.getChar('b').click();
+      mainPage.getChar('c').click();
+      mainPage.getChar('d').click();
+      mainPage.getChar('e').click();
+      mainPage.getChar('f').click();
+      mainPage.getChar('g').click();
+      mainPage.getChar('h').click();
+      mainPage.getChar('i').click();
+      mainPage.getChar('j').click();
+
+      expect(mainPage.getGuess()).toBe('a_e_____d');
+
+      mainPage.getChar('k').click();
+      var modal = new GameOverModal();
+      modal.getOkButton().click();
+      expect(mainPage.getGuess()).toBe('_________');
     });
   });
 });

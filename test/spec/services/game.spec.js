@@ -48,8 +48,13 @@ describe('Factory: game', function () {
     expect(aGame().state).toBe(gameState.playing);
   }));
 
-  it('should hold a word', inject(function () {
-    expect(aGame('Edge').word).toBe('Edge');
+  it('should hold the game phrase and return the same object every time', inject(function () {
+    var game = aGame('Edge');
+
+    var phrase = game.getPhrase();
+
+    expect(phrase).toEqual([{val: 'E'}, {val: 'd'}, {val: 'g'}, {val: 'e'}]);
+    expect(game.getPhrase()).toBe(phrase);
   }));
 
   it('should hold the abc', function () {

@@ -8,15 +8,15 @@
       templateUrl: 'views/letter.preload.html',
       restrict: 'E',
       scope: {
-        value: '@'
+        letterObj: '=value'
       },
       link: function postLink(scope) {
-        scope.isWhiteSpace = !scope.value || scope.value === ' ';
+        scope.isWhiteSpace = !scope.letterObj.val || scope.letterObj.val === ' ';
         scope.isRevealed = scope.isWhiteSpace;
         scope.$on('revealLetter', function (args, letter) {
-          scope.isRevealed = scope.isRevealed || letter.toLowerCase() === scope.value.toLowerCase();
+          scope.isRevealed = scope.isRevealed || letter.toLowerCase() === scope.letterObj.val.toLowerCase();
         });
-        scope.$on('resetGame', function () {
+        scope.$on('gameOver', function () {
           scope.isRevealed = false;
         });
       }
