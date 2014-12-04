@@ -2,12 +2,13 @@
 
 angular.module('hangmanAppMocks', ['ngMockE2E'])
   .service('serverMockLogic', function () {
-    var categories = ['movies', 'countriesCapitals', 'cars', 'famousAustralians'];
+    var categories = ['movies', 'countriesCapitals', 'cars', 'famousAustralians', 'coolStuff'];
     var db = {
       countriesCapitals: ['Jerusalem', 'Paris'],
       cars: ['BMW', 'OPEL', 'KIA'],
       famousAustralians: ['Crocodile Dandi'],
-      movies: ['Big', 'Seven', 'Blue']
+      movies: ['Big', 'Seven', 'Blue'],
+      coolStuff: ['TDD Works']
     };
     this.getCategories = function () {
       return categories;
