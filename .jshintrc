@@ -20,6 +20,7 @@
     "_": false,
     "angular": false,
     "require": false,
-    "module": false
+    "module": false,
+    "ModuleBuilder": false
   }
 }

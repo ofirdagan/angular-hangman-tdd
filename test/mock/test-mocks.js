@@ -3,9 +3,11 @@ angular.module('testUtils', [])
   .service('testUtils', function ($q, $rootScope) {
 
     function createAsyncFunc() {
-      var defer;
+      var defer = $q.defer();
+      var firstCall = true;
       var func = jasmine.createSpy().andCallFake(function () {
-        defer = $q.defer();
+        defer = firstCall ? defer : $q.defer();
+        firstCall = false;
         return defer.promise;
       });
 
@@ -16,6 +18,8 @@ angular.module('testUtils', [])
 
       return func;
     }
+
+    this.anAsyncFunc = createAsyncFunc;
 
     this.aHangmanApi = function () {
       return {
