@@ -4,24 +4,7 @@ describe('Factory: game', function () {
 
   // load the service's module
   beforeEach(function () {
-    module('hangmanAppInternal', {
-      hangmanApi: {
-        getCategories: jasmine.createSpy('getCategories').andReturn({
-          then: function (callback) {
-            callback(['famousCats', 'countriesCapitals']);
-          }
-        })
-      },
-      wordBank: {
-        getNextWord: jasmine.createSpy('getNextWord').andCallFake(function () {
-          return {
-            then: function (callback) {
-              callback('Edge of Tomorrow');
-            }
-          };
-        })
-      }
-    });
+    module('hangmanAppInternal');
     module(function ($provide) {
       $provide.constant('maxStrikes', 5);
     });

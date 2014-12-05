@@ -24,19 +24,27 @@ describe('Service: hangmanApi', function () {
 
   it('should get categories list from the server', inject(function () {
     $httpBackend.expectGET('_api/categories').respond(categoriesMock);
-    hangmanApi.getCategories().then(function (categories) {
-      expect(categories).toEqual(categoriesMock);
+    var categories = [];
+
+    hangmanApi.getCategories().then(function (categoriesRespond) {
+      categories = categoriesRespond;
     });
+
     $httpBackend.flush();
+    expect(categories).toEqual(categoriesMock);
   }));
 
   it('should get words by category list from the server', inject(function () {
     var someCategory = 'cars';
     $httpBackend.expectGET('_api/category/' + someCategory + '/words').respond(wordsListMock[someCategory]);
-    hangmanApi.getWordsInCategory(someCategory).then(function (words) {
-      expect(words).toEqual(wordsListMock[someCategory]);
+    var words = [];
+
+    hangmanApi.getWordsInCategory(someCategory).then(function (wordsRespond) {
+      words = wordsRespond;
     });
+
     $httpBackend.flush();
+    expect(words).toEqual(wordsListMock[someCategory]);
   }));
 
 });

@@ -1,6 +1,7 @@
 'use strict';
 angular.module('testUtils', [])
   .service('testUtils', function ($q, $rootScope) {
+
     function createAsyncFunc() {
       var defer;
       var func = jasmine.createSpy().andCallFake(function () {
@@ -18,7 +19,8 @@ angular.module('testUtils', [])
 
     this.aHangmanApi = function () {
       return {
-        getCategories: createAsyncFunc()
+        getCategories: createAsyncFunc(),
+        getWordsInCategory: createAsyncFunc()
       };
     };
 
