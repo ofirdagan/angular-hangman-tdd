@@ -20,7 +20,6 @@
     "angular-translate": "~1.1.0",
     "angular-i18n": "~1.2.0",
     "uri.js": "~1.13.1",
-    "wix-angular": "~0.1.1",
     "lodash": "~2.4.1",
     "reset-css": "~2.0.20110126",
     "mobile-angular-ui": "~1.1.0-beta.30"
@@ -28,7 +27,8 @@
   "devDependencies": {
     "angular-mocks": "~1.2.0",
     "es5-shim": "~2.1.0",
-    "ng-improved-testing": "~0.2.2"
+    "ng-improved-testing": "~0.2.2",
+    "tada": "~0.1.1"
   },
   "resolutions": {
     "angular": "~1.2.0"

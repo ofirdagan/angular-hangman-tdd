@@ -7,22 +7,8 @@
 
     this.maxStrikes = maxStrikes;
     this.categories = [];
+    this.category = '';
     var self = this;
-
-    this.createNewGame = function () {
-      wordBank.getNextWord(self.category).then(function (word) {
-        self.game = new Game(word);
-      });
-    };
-
-    this.onCategoryChanged = function () {
-      $rootScope.$broadcast('categoryChanged');
-      self.createNewGame();
-    };
-
-    $scope.$on('gameOver', function () {
-      $rootScope.toggle('gameOverOverlay', 'on');
-    });
 
     hangmanApi.getCategories().then(function (categories) {
       angular.copy(categories, self.categories);
@@ -30,6 +16,20 @@
       self.onCategoryChanged();
     });
 
+    this.onCategoryChanged = function () {
+      $rootScope.$broadcast('categoryChanged');
+      createNewGame();
+    };
+
+    $scope.$on('gameOver', function () {
+      $rootScope.toggle('gameOverOverlay', 'on');
+    });
+
+    function createNewGame() {
+      wordBank.getNextWord(self.category).then(function (word) {
+        self.game = new Game(word);
+      });
+    }
   }
 
   angular

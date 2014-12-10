@@ -34,6 +34,7 @@ module.exports = function (config) {
       'app/bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.js',
       'app/bower_components/ng-module-introspector/ng-module-introspector.js',
       'app/bower_components/ng-improved-testing/ng-improved-testing.js',
+      'app/bower_components/tada/dist/concat/scripts/tada.js',
       '{app,.tmp}/*.js',
       '{app,.tmp}/scripts/*.js',
       '{app,.tmp}/scripts/*/**/*.js',

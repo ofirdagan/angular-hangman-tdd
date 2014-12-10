@@ -6,14 +6,14 @@ describe('Service: wordBank', function () {
   var wordsMock = ['Terminator', 'Alian', 'c', 'd', 'e', 'f', 'g', 'h'];
 
   beforeEach(function () {
-    module('testUtils');
+    module('tada');
     module('hangmanAppInternal');
   });
 
   // instantiate service
   var wordBank;
-  beforeEach(inject(function (_wordBank_, _$q_, hangmanApi, testUtils) {
-    hangmanApi.getWordsInCategory = testUtils.anAsyncFunc();
+  beforeEach(inject(function (_wordBank_, _$q_, hangmanApi, tadaUtils) {
+    hangmanApi.getWordsInCategory = tadaUtils.anAsyncFunc();
     wordBank = _wordBank_;
     $q = _$q_;
   }));
