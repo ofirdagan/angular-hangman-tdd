@@ -18,6 +18,7 @@ module.exports = function (grunt) {
     unitTestFiles: unitTestFiles,
     protractor: true
   });
+  grunt.modifyTask('yeoman', {local: 'http://localhost:9000/'});
 
   //Follow this URL for instructions on how to override built-in definitions:
   //https://github.com/wix/wix-gruntfile/blob/master/README.md
