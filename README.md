@@ -4,8 +4,8 @@ Angular Hangman TDD Demo
 1. [Abstract](#abstract)
 2. [Installation](#installation)
 3. [Usage](#usage)
-4. [Game API](#game_api)
-4. [Technology stack](#technology_stack)
+4. [Game API](#game-api)
+4. [Technology stack](#technology-stack)
 5. [Demo](#demo)
 6. [Tests](#tests)
 

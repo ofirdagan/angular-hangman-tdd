@@ -150,7 +150,7 @@ describe('hangmanApp Main Page', function () {
       mainPage.getChar('k').click();
       var modal = new GameOverModal();
       modal.getOkButton().click();
-      expect(mainPage.getGuess()).toBe('_________');
+      expect(mainPage.getGuess()).toBe('___________');
     });
   });
 });
