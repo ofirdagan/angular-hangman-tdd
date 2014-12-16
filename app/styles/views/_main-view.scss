@@ -3,13 +3,14 @@
 }
 
 .hangman-draw {
-  height: 270px;
+  position: relative;
+  height: $draw-height;
   .svg-draw {
     pointer-events: none;
-    height: 760px;
-    position: absolute;
-    top: -90px;
-    left: 5px;
+    position: relative;
+    height: $draw-height;
+    margin: 0 auto;
+    display: inherit;
   }
 }
 
@@ -34,6 +35,7 @@
 }
 .bottom {
   position: absolute;
+  width: 100%;
   padding: $content-padding;
   bottom: 0;
   background-color: $bottom-bg-color;
