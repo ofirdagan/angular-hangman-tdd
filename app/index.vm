@@ -57,7 +57,7 @@
     ${newRelicEndUserHeader}
     
   </head>
-  <body>
+  <body class="body">
     
     <!-- Add your site or application content here -->
     <div class="container" ng-include="'views/main.view.html'"></div>

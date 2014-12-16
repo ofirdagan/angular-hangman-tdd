@@ -54,7 +54,7 @@ describe('hangmanApp Main Page', function () {
 
   it('should show current strikes', function () {
     mainPage.navigate();
-    expect(mainPage.getCurrentStrikes()).toEqual('Strikes: 0/8');
+    expect(mainPage.getCurrentStrikes()).toEqual('0/8');
   });
 
   describe('db with 1 word', function () {
@@ -81,10 +81,10 @@ describe('hangmanApp Main Page', function () {
 
     it('should update strikes', function () {
       mainPage.getChar('z').click();
-      expect(mainPage.getCurrentStrikes()).toEqual('Strikes: 1/8');
+      expect(mainPage.getCurrentStrikes()).toEqual('1/8');
 
       mainPage.getChar('f').click();
-      expect(mainPage.getCurrentStrikes()).toEqual('Strikes: 2/8');
+      expect(mainPage.getCurrentStrikes()).toEqual('2/8');
     });
 
     it('should draw hangman on wrong guess', function () {
@@ -150,7 +150,7 @@ describe('hangmanApp Main Page', function () {
       mainPage.getChar('k').click();
       var modal = new GameOverModal();
       modal.getOkButton().click();
-      expect(mainPage.getGuess()).toBe('___________');
+      expect(mainPage.getGuess()).toBe('_________');
     });
   });
 });

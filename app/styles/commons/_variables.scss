@@ -5,8 +5,19 @@ $font-helvetica75: "HelveticaNeueW01-75Bold", "HelveticaNeueW02-75Bold", "Helvet
 
 //LAYOUT
 $page-width: 320px;
+$content-padding: 0 20px;
 
 
 //COLORS
+$secondary-color: #65c8d0;
+$secondary-invert-color: #ffffff;
+$primary-text-color: #4d4d4d;
+$bottom-bg-color: #f2f2f2;
+$disabled-text: #c4c4c4;
+$strikes: #ed1e79;
 
-$background-color: #e8e8e8;
+//SIZES:
+$xtra-large-size: 24px;
+$large-size: 20px;
+$medium-size: 16px;
+$background-color: #ffffff;

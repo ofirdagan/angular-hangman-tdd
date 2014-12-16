@@ -1,7 +1,9 @@
 .title {
-  margin-top: 30px;
   font-family: $font-helvetica75;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: -1px;
+  font-size: $xtra-large-size;
+  height: 55px;
+  background-color: $secondary-color;
+  color: $secondary-invert-color;
+  line-height: 55px;
+  margin-bottom: 20px;
 }

@@ -3,31 +3,62 @@
 }
 
 .hangman-draw {
-  height: 210px;
+  height: 270px;
   .svg-draw {
     pointer-events: none;
-    height: 610px;
+    height: 760px;
     position: absolute;
     top: -90px;
-    left: 30px;
+    left: 5px;
   }
 }
 
 .char {
-  font-size: 20px;
+  $box-height: 35px;
+  font-size: 18px;
   display: inline-block;
-  margin: 10px;
-
+  background-color: $background-color;
+  width: 25px;
+  height: $box-height;
+  line-height: $box-height;
+  margin: 3px;
+  border-radius: 3px;
+  cursor: pointer;
   &.guessed-char {
-    text-decoration: line-through;
+    color: $disabled-text;
+    background-color: inherit;
   }
 }
-
+.top {
+  padding: $content-padding;
+}
+.bottom {
+  position: absolute;
+  padding: $content-padding;
+  bottom: 0;
+  background-color: $bottom-bg-color;
+}
 .abc {
+  user-select: none;
   margin-top: 20px;
 }
 .stats {
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 10px;
+  margin-bottom: 22px;
+  margin-top: 13px;
+}
+
+.word {
+  color: $secondary-color;
+  font-size: $large-size;
+}
+
+.strikes {
+  text-align: right;
+}
+
+.active-strikes {
+  color: $strikes;
+  font-family: $font-helvetica75;
+  position: relative;
+  bottom: 1px;
 }

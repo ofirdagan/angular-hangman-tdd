@@ -18,18 +18,18 @@
 
     this.onCategoryChanged = function () {
       $rootScope.$broadcast('categoryChanged');
-      createNewGame();
+      self.createNewGame();
+    };
+
+    this.createNewGame = function () {
+      wordBank.getNextWord(self.category).then(function (word) {
+        self.game = new Game(word);
+      });
     };
 
     $scope.$on('gameOver', function () {
       $rootScope.toggle('gameOverOverlay', 'on');
     });
-
-    function createNewGame() {
-      wordBank.getNextWord(self.category).then(function (word) {
-        self.game = new Game(word);
-      });
-    }
   }
 
   angular
