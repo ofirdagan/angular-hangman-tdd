@@ -71,7 +71,6 @@
     <script src="scripts/locale/messages_${locale}.js"></script>
     <!-- build:js scripts/modules.js -->
     <script src="bower_components/uri.js/src/URI.js"></script>
-    <script src="bower_components/wix-angular/dist/wix-angular.js"></script>
     <script src="bower_components/lodash/dist/lodash.js"></script>
     <script src="bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.js"></script>
     <!-- endbuild -->
@@ -96,14 +95,5 @@
       }
     </script>
     <!-- #end -->
-    <script>
-      angular.module('hangmanApp').config(function (wixAngularProvider) {
-        wixAngularProvider.setStaticsUrl('${staticsUrl}');
-        wixAngularProvider.setExperiments(${experiments});
-      });
-    </script>
-    
-    ${newRelicEndUserFooter}
-    
   </body>
 </html>
