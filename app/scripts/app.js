@@ -3,7 +3,7 @@
 //add services, directives, controllers, filters, etc. in this module
 //avoid adding module dependencies for this module
 angular
-  .module('hangmanAppInternal', ['mobile-angular-ui']);
+  .module('hangmanAppInternal', ['mobile-angular-ui', 'hangmanConstants']);
 
 //add module dependencies & config and run blocks in this module
 //load only the internal module in tests and mock any module dependency

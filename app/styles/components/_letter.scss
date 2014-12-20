@@ -1,8 +1,8 @@
-letter {
+.letter {
   display: inline-block;
   margin-left: 5px;
 
-  .white-space {
+  &.white-space {
     margin-left: 15px;
   }
 

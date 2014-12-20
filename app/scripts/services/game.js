@@ -3,14 +3,13 @@
 (function () {
 
   /* @ngInject */
-  function gameFactory(gameState, $rootScope, maxStrikes) {
-    function Game(pharse) {
+  function gameFactory(gameState, maxStrikes) {
+    function Game(guessWord) {
       var self = this;
-      var guessedLetters = [];
+      var selectedLetters = [];
       var MAX_STRIKES = maxStrikes;
-      var word = pharse;
 
-      this.abc = 'abcdefghijklmnopqrstuvwxyz'.split('');
+      this.charactersInLanguage = 'abcdefghijklmnopqrstuvwxyz'.split('');
       this.strikes = 0;
       this.state = gameState.playing;
 
@@ -18,43 +17,35 @@
         if (self.strikes === MAX_STRIKES) {
           self.state = gameState.lost;
         } else {
-          var won = word.toLowerCase().replace(/\s/g, '').split('').every(function (char) {
-            return _(guessedLetters).contains(char);
+          var won = guessWord.toLowerCase().replace(/\s/g, '').split('').every(function (char) {
+            return _(selectedLetters).contains(char);
           });
           if (won) {
             self.state = gameState.won;
           }
         }
-        if (self.state !== gameState.playing) {
-          $rootScope.$broadcast('gameOver', self.state);
-        }
       }
 
-      this.getPhrase = function () {
-        if (self.phrase) {
-          return self.phrase;
-        }
-        self.phrase = word.split('').reduce(function (acc, letter) {
-          acc.push({val: letter});
-          return acc;
-        }, []);
-        return self.phrase;
-      };
-
-      this.alreadyGuessed = function (letter) {
-        return _(guessedLetters).contains(letter);
-      };
-
-      this.revealLetter = function (letter) {
-        if (self.alreadyGuessed(letter)) {
+      this.selectLetter = function (letter) {
+        if (self.isLetterSelected(letter)) {
           return;
         }
-        guessedLetters.push(letter);
-        if (!word.toLowerCase().match(letter)) {
+        selectedLetters.push(letter);
+        if (!guessWord.toLowerCase().match(letter)) {
           self.strikes++;
         }
         checkAndUpdateGameStatus();
-        $rootScope.$broadcast('revealLetter', letter);
+      };
+
+      this.isLetterSelected = function (char) {
+        return selectedLetters.indexOf(char.toLowerCase()) !== -1;
+      };
+
+      this.getRevealedLettersArray = function () {
+        return guessWord.split('').map(function (char) {
+          var shouldShowChar = char === ' ' || self.isLetterSelected(char);
+          return shouldShowChar ? char : '_';
+        });
       };
     }
     return Game;

@@ -3,7 +3,7 @@
 (function () {
 
   /* @ngInject */
-  function MainController(Game, maxStrikes, $scope, $rootScope, hangmanApi, wordBank) {
+  function MainController(Game, maxStrikes, $scope, hangmanApi, wordBank, hangmanEvents, gameState) {
 
     this.maxStrikes = maxStrikes;
     this.categories = [];
@@ -17,7 +17,6 @@
     });
 
     this.onCategoryChanged = function () {
-      $rootScope.$broadcast('categoryChanged');
       self.createNewGame();
     };
 
@@ -27,8 +26,16 @@
       });
     };
 
-    $scope.$on('gameOver', function () {
-      $rootScope.toggle('gameOverOverlay', 'on');
+    $scope.$watch(function () {
+      return self.game ? self.game.state : undefined;
+    }, function (value) {
+      if (value !== gameState.playing) {
+        $scope.toggle('gameOverOverlay', 'on');
+      }
+    });
+
+    $scope.$on(hangmanEvents.letterSelected, function (event, letter) {
+      self.game.selectLetter(letter);
     });
   }
 

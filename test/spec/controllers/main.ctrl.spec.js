@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Controller: MainController', function () {
-  var hangmanApi, wordBank, mainController, scope;
+  var hangmanApi, wordBank, mainController, scope, Game;
   var maxStrikes = 5;
   // load the controller's module
 
@@ -14,7 +14,8 @@ describe('Controller: MainController', function () {
         $scope: scope,
         hangmanApi: hangmanApi,
         wordBank: wordBank,
-        maxStrikes: maxStrikes
+        maxStrikes: maxStrikes,
+        Game: Game
       });
     });
     return ctrl;
@@ -22,10 +23,12 @@ describe('Controller: MainController', function () {
 
   beforeEach(function () {
     module('hangmanTestKit');
+    module('hangmanConstants');
     module('hangmanAppInternal');
-    inject(function (hangmanApiMock, wordBankMock) {
+    inject(function (hangmanApiMock, wordBankMock, GameMock) {
       hangmanApi = hangmanApiMock;
       wordBank = wordBankMock;
+      Game = GameMock;
     });
     mainController = aMainController();
   });
@@ -34,20 +37,15 @@ describe('Controller: MainController', function () {
     expect(mainController.maxStrikes).toBe(maxStrikes);
   }));
 
-  it('should show overlay when game over', inject(function ($rootScope, gameState) {
+  it('should show overlay when game over', inject(function (gameState, $rootScope) {
     spyOn($rootScope, 'toggle').andCallThrough();
+    hangmanApi.getCategories.returns(['famousCats']);
+    wordBank.getNextWord.whenCalledWithArgs('famousCats').returns('tom');
 
-    scope.$broadcast('gameOver', gameState.lost);
+    mainController.game.state = gameState.lost;
     scope.$digest();
 
     expect($rootScope.toggle).toHaveBeenCalledWith('gameOverOverlay', 'on');
-  }));
-
-  it('should broadcast event on category change', inject(function ($rootScope) {
-    spyOn($rootScope, '$broadcast');
-
-    mainController.onCategoryChanged();
-    expect($rootScope.$broadcast).toHaveBeenCalledWith('categoryChanged');
   }));
 
   it('should have first category as the default selected category', inject(function () {
@@ -70,12 +68,21 @@ describe('Controller: MainController', function () {
     wordBank.getNextWord.whenCalledWithArgs('famousCats').returns('tom');
 
     expect(mainController.game).toBeDefined();
-    expect(mainController.game.getPhrase()).toEqual([{ val: 't' }, { val: 'o' }, { val: 'm' }]);
+    expect(Game).toHaveBeenCalledWith('tom');
   }));
 
   it('should create a new game on category change', inject(function () {
     mainController.onCategoryChanged();
     expect(wordBank.getNextWord).toHaveBeenCalledOnce();
+  }));
+
+  it('should call selectLetter on letterSelected event', inject(function (hangmanEvents) {
+    hangmanApi.getCategories.returns(['famousCats']);
+
+    wordBank.getNextWord.whenCalledWithArgs('famousCats').returns('tom');
+    scope.$broadcast(hangmanEvents.letterSelected, 'a');
+
+    expect(mainController.game.selectLetter).toHaveBeenCalledWith('a');
   }));
 
 });

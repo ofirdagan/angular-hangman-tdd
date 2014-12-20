@@ -1,6 +1,7 @@
 'use strict';
 
 var Draw = require('../fragments/draw.js');
+var Keyboard = require('../fragments/keyboard.js');
 
 function MainPage() {
   this.navigate = function () {
@@ -25,9 +26,8 @@ function MainPage() {
     });
   };
 
-  this.getChar = function (char) {
-    var index = char.charCodeAt() - 'a'.charCodeAt();
-    return $$('.char').get(index);
+  this.getGuessWordLetterAt = function (index) {
+    return $$('.letter').get(index);
   };
 
   this.getCategories = function () {
@@ -40,6 +40,10 @@ function MainPage() {
 
   this.getDraw = function () {
     return new Draw();
+  };
+
+  this.getKeyboard = function () {
+    return new Keyboard();
   };
 }
 

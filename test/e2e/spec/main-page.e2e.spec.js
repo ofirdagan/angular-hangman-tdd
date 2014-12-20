@@ -42,7 +42,7 @@ describe('hangmanApp Main Page', function () {
     mainPage.getCategories().click();
     mainPage.selectCategory(1).click();
 
-    expect(mainPage.getGuess()).toBe('__________');
+    expect(mainPage.getGuess()).toBe('______ ____');
   });
 
   it('should be able to replace categories', function () {
@@ -69,88 +69,92 @@ describe('hangmanApp Main Page', function () {
       mainPage.navigate();
     });
 
+    it('should add white-space class to white spaces', function () {
+      expect(mainPage.getGuessWordLetterAt(1)).toHaveClass('white-space');
+    });
+
     it('should reveal letter on the right letter click', function () {
-      expect(mainPage.getGuess()).toBe('_________');
+      expect(mainPage.getGuess()).toBe('_ ____ ____');
 
-      mainPage.getChar('a').click();
-      expect(mainPage.getGuess()).toBe('a________');
+      mainPage.getKeyboard().getKey('a').click();
+      expect(mainPage.getGuess()).toBe('a ____ ____');
 
-      mainPage.getChar('o').click();
-      expect(mainPage.getGuess()).toBe('a_____o__');
+      mainPage.getKeyboard().getKey('o').click();
+      expect(mainPage.getGuess()).toBe('a ____ _o__');
     });
 
     it('should update strikes', function () {
-      mainPage.getChar('z').click();
+      mainPage.getKeyboard().getKey('z').click();
       expect(mainPage.getCurrentStrikes()).toEqual('1/8');
 
-      mainPage.getChar('f').click();
+      mainPage.getKeyboard().getKey('f').click();
       expect(mainPage.getCurrentStrikes()).toEqual('2/8');
     });
 
     it('should draw hangman on wrong guess', function () {
       expect(mainPage.getDraw().getVisibleStrikes()).toBe(0);
 
-      mainPage.getChar('z').click();
+      mainPage.getKeyboard().getKey('z').click();
       expect(mainPage.getDraw().getVisibleStrikes()).toBe(1);
 
-      mainPage.getChar('f').click();
+      mainPage.getKeyboard().getKey('f').click();
       expect(mainPage.getDraw().getVisibleStrikes()).toBe(2);
     });
 
-    it('should add class on guessed letters', function () {
-      mainPage.getChar('z').click();
+    it('should add class on selected letters', function () {
+      mainPage.getKeyboard().getKey('z').click();
 
-      expect(mainPage.getChar('z')).toHaveClass('guessed-char');
+      expect(mainPage.getKeyboard().getKey('z')).toHaveClass('was-selected');
     });
 
     it('should win a game', function () {
-      mainPage.getChar('t').click();
-      mainPage.getChar('w').click();
-      mainPage.getChar('r').click();
-      mainPage.getChar('a').click();
-      mainPage.getChar('d').click();
-      mainPage.getChar('e').click();
-      mainPage.getChar('s').click();
-      mainPage.getChar('o').click();
+      mainPage.getKeyboard().getKey('t').click();
+      mainPage.getKeyboard().getKey('w').click();
+      mainPage.getKeyboard().getKey('r').click();
+      mainPage.getKeyboard().getKey('a').click();
+      mainPage.getKeyboard().getKey('d').click();
+      mainPage.getKeyboard().getKey('e').click();
+      mainPage.getKeyboard().getKey('s').click();
+      mainPage.getKeyboard().getKey('o').click();
 
       var modal = new GameOverModal();
       expect(modal.getText()).toBe('You won!');
     });
 
     it('should lose a game', function () {
-      mainPage.getChar('a').click();
-      mainPage.getChar('b').click();
-      mainPage.getChar('c').click();
-      mainPage.getChar('d').click();
-      mainPage.getChar('e').click();
-      mainPage.getChar('f').click();
-      mainPage.getChar('g').click();
-      mainPage.getChar('h').click();
-      mainPage.getChar('i').click();
-      mainPage.getChar('j').click();
-      mainPage.getChar('k').click();
+      mainPage.getKeyboard().getKey('a').click();
+      mainPage.getKeyboard().getKey('b').click();
+      mainPage.getKeyboard().getKey('c').click();
+      mainPage.getKeyboard().getKey('d').click();
+      mainPage.getKeyboard().getKey('e').click();
+      mainPage.getKeyboard().getKey('f').click();
+      mainPage.getKeyboard().getKey('g').click();
+      mainPage.getKeyboard().getKey('h').click();
+      mainPage.getKeyboard().getKey('i').click();
+      mainPage.getKeyboard().getKey('j').click();
+      mainPage.getKeyboard().getKey('k').click();
       var modal = new GameOverModal();
       expect(modal.getText()).toBe('You lost!');
     });
 
     it('should start a new game after game is over', function () {
-      mainPage.getChar('a').click();
-      mainPage.getChar('b').click();
-      mainPage.getChar('c').click();
-      mainPage.getChar('d').click();
-      mainPage.getChar('e').click();
-      mainPage.getChar('f').click();
-      mainPage.getChar('g').click();
-      mainPage.getChar('h').click();
-      mainPage.getChar('i').click();
-      mainPage.getChar('j').click();
+      mainPage.getKeyboard().getKey('a').click();
+      mainPage.getKeyboard().getKey('b').click();
+      mainPage.getKeyboard().getKey('c').click();
+      mainPage.getKeyboard().getKey('d').click();
+      mainPage.getKeyboard().getKey('e').click();
+      mainPage.getKeyboard().getKey('f').click();
+      mainPage.getKeyboard().getKey('g').click();
+      mainPage.getKeyboard().getKey('h').click();
+      mainPage.getKeyboard().getKey('i').click();
+      mainPage.getKeyboard().getKey('j').click();
 
-      expect(mainPage.getGuess()).toBe('a_e_____d');
+      expect(mainPage.getGuess()).toBe('a _e__ ___d');
 
-      mainPage.getChar('k').click();
+      mainPage.getKeyboard().getKey('k').click();
       var modal = new GameOverModal();
       modal.getOkButton().click();
-      expect(mainPage.getGuess()).toBe('_________');
+      expect(mainPage.getGuess()).toBe('_ ____ ____');
     });
   });
 });

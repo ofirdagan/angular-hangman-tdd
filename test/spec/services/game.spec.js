@@ -10,15 +10,6 @@ describe('Factory: game', function () {
     });
   });
 
-  function aGame(word) {
-    var game;
-    word = word || 'Edge of Tomorrow';
-    inject(function (Game) {
-      game = new Game(word);
-    });
-    return game;
-  }
-
   it('should be defined', function () {
     expect(aGame()).toBeDefined();
   });
@@ -31,102 +22,134 @@ describe('Factory: game', function () {
     expect(aGame().state).toBe(gameState.playing);
   }));
 
-  it('should hold the game phrase and return the same object every time', inject(function () {
-    var game = aGame('Edge');
-
-    var phrase = game.getPhrase();
-
-    expect(phrase).toEqual([{val: 'E'}, {val: 'd'}, {val: 'g'}, {val: 'e'}]);
-    expect(game.getPhrase()).toBe(phrase);
-  }));
-
-  it('should hold the abc', function () {
-    expect(aGame().abc).toEqual(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']);
-  });
-
-  it('should broadcast the letter that was pressed', inject(function ($rootScope) {
-    var revealLetter = jasmine.createSpy('revealLetterSpy');
-    $rootScope.$on('revealLetter', revealLetter);
-
-    aGame().revealLetter('a');
-
-    expect(revealLetter).toHaveBeenCalledWith(jasmine.any(Object), 'a');
-  }));
-
-  it('should hold the guessed letters', function () {
+  it('should have the characters in language', function () {
     var game = aGame();
-    expect(game.alreadyGuessed('a')).toBe(false);
-    game.revealLetter('a');
-    expect(game.alreadyGuessed('a')).toBe(true);
+
+    expect(game.charactersInLanguage).toEqual('abcdefghijklmnopqrstuvwxyz'.split(''));
   });
 
-  it('should count strikes', function () {
+  it('should select letters', inject(function () {
+    //given
+    var game = aGame('Chazz Michael Michaels');
+
+    //when
+    game.selectLetter('a');
+
+    //then
+    expect(game.isLetterSelected('a')).toBe(true);
+    expect(game.isLetterSelected('i')).toBe(false);
+  }));
+
+  it('should return the phrase in its current status', function () {
+    var game = aGame('google campus');
+
+    expect(game.getRevealedLettersArray()).toEqual('______ ______'.split(''));
+
+    game.selectLetter('a');
+    expect(game.getRevealedLettersArray()).toEqual('______ _a____'.split(''));
+
+    game.selectLetter('o');
+    expect(game.getRevealedLettersArray()).toEqual('_oo___ _a____'.split(''));
+
+    game.selectLetter('z');
+    expect(game.getRevealedLettersArray()).toEqual('_oo___ _a____'.split(''));
+  });
+
+  it('should reveal capital letters when letter is selected', function () {
+    var game = aGame('CAC');
+
+    game.selectLetter('a');
+    expect(game.getRevealedLettersArray()).toEqual('_A_'.split(''));
+
+    game.selectLetter('c');
+    expect(game.getRevealedLettersArray()).toEqual('CAC'.split(''));
+  });
+
+  it('should count strikes correctly', function () {
     var game = aGame('test secret');
     expect(game.strikes).toBe(0);
 
-    game.revealLetter('a');
+    game.selectLetter('a');
     expect(game.strikes).toBe(1);
 
-    game.revealLetter('t');
+    game.selectLetter('t');
     expect(game.strikes).toBe(1);
 
-    game.revealLetter('d');
+    game.selectLetter('d');
     expect(game.strikes).toBe(2);
+  });
+
+  it('should count strikes correctly with capital letters', function () {
+    var game = aGame('Test secret');
+    expect(game.strikes).toBe(0);
+
+    game.selectLetter('a');
+    expect(game.strikes).toBe(1);
+
+    game.selectLetter('t');
+    expect(game.strikes).toBe(1);
   });
 
   it('should change game status to won if player guessed the word', inject(function (gameState) {
     var game = aGame('test a');
     expect(game.state).toBe(gameState.playing);
-    game.revealLetter('t');
-    game.revealLetter('e');
+    game.selectLetter('t');
+    game.selectLetter('e');
     expect(game.state).toBe(gameState.playing);
-    game.revealLetter('s');
-    game.revealLetter('a');
+    game.selectLetter('s');
+    game.selectLetter('a');
     expect(game.state).toBe(gameState.won);
   }));
 
   it('should change game status to won if player guessed the word ignoring case', inject(function (gameState) {
     var game = aGame('Test');
     expect(game.state).toBe(gameState.playing);
-    game.revealLetter('t');
-    game.revealLetter('e');
+    game.selectLetter('t');
+    game.selectLetter('e');
     expect(game.state).toBe(gameState.playing);
-    game.revealLetter('s');
+    game.selectLetter('s');
     expect(game.state).toBe(gameState.won);
   }));
 
-  it('should change game status to lost if player did not guessed the word within max strikes', inject(function (gameState, maxStrikes, $rootScope) {
+  it('should change game status to lost if player did not guessed the word within max strikes', inject(function (gameState, maxStrikes) {
     var game = aGame('test');
-    var gameOverSpy = jasmine.createSpy('game over spy');
-    $rootScope.$on('gameOver', gameOverSpy);
     expect(game.state).toBe(gameState.playing);
     expect(maxStrikes).toBe(5);
 
-    game.revealLetter('t');
-    game.revealLetter('e');
+    game.selectLetter('t');
+    game.selectLetter('e');
     expect(game.state).toBe(gameState.playing);
-    game.revealLetter('a');
-    game.revealLetter('b');
-    game.revealLetter('c');
-    game.revealLetter('d');
+    game.selectLetter('a');
+    game.selectLetter('b');
+    game.selectLetter('c');
+    game.selectLetter('d');
     expect(game.state).toBe(gameState.playing);
-    game.revealLetter('r');
+    game.selectLetter('r');
 
     expect(game.state).toBe(gameState.lost);
-    expect(gameOverSpy).toHaveBeenCalledWith(jasmine.any(Object), 'lost');
   }));
 
   it('should not count strike twice for the same letter', function () {
     var game = aGame('test');
-    game.revealLetter('a');
+    game.selectLetter('a');
     expect(game.strikes).toBe(1);
-    game.revealLetter('a');
+    game.selectLetter('a');
     expect(game.strikes).toBe(1);
   });
 
   it('should not count strike for case difference', function () {
     var game = aGame('Big');
-    game.revealLetter('b');
+    game.selectLetter('b');
     expect(game.strikes).toBe(0);
   });
+
+  function aGame(word) {
+    var game;
+    word = word || 'Edge of Tomorrow';
+    inject(function (Game) {
+      game = new Game(word);
+    });
+    return game;
+  }
+
 });

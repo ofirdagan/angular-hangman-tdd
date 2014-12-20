@@ -9,11 +9,10 @@
       %section.hangman-draw
         .hangman-svg{:"ng-include" => "'views/hangman.svg.preload.html'"}
       %section.word.text-horizontal-center
-        %letter{:"ng-repeat" => "letter in main.game.getPhrase()", :value => "letter"}
+        .letter{:"ng-repeat" => "letter in main.game.getRevealedLettersArray() track by $index", :"ng-class" => "{'white-space': letter === ' '}"} {{letter}}
     %section.bottom
-      %section.abc.text-horizontal-center
-        .char{:"ng-repeat" => "char in main.game.abc", :"ng-click" => "main.game.revealLetter(char)",
-          :"ng-class" => "{'guessed-char': main.game.alreadyGuessed(char)}"} {{char}}
+      %section.keyboard.text-horizontal-center
+        %keyboard{:keys => "main.game.charactersInLanguage", :"was-selected" => "main.game.isLetterSelected"}
       %section.actions
       %section.stats
         .strikes

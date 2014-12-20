@@ -14,7 +14,7 @@
   }
 }
 
-.char {
+.key {
   $box-height: 35px;
   font-size: 18px;
   display: inline-block;
@@ -25,7 +25,7 @@
   margin: 3px;
   border-radius: 3px;
   cursor: pointer;
-  &.guessed-char {
+  &.was-selected {
     color: $disabled-text;
     background-color: inherit;
   }
@@ -40,7 +40,7 @@
   bottom: 0;
   background-color: $bottom-bg-color;
 }
-.abc {
+.keyboard {
   user-select: none;
   margin-top: 20px;
 }
