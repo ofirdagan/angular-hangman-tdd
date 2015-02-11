@@ -25,6 +25,8 @@ This project features:
 
 And more..
 
+![game screenshot](app/images/hangman.png)
+
 ## Installation
 
 After you cloned this project, navigate into the project folder and run the following commands in the shell
