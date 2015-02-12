@@ -8,6 +8,7 @@ Angular Hangman TDD Demo
 4. [Technology stack](#technology-stack)
 5. [Demo](#demo)
 6. [Tests](#tests)
+7. [Live Demo Version](#live-demo-version)
 
 
 ## Abstract
@@ -88,3 +89,7 @@ Coming soon
 For unit tests please see `test/spec` folder.
 
 For E2E tests please see `test/e2e/spec` folder.
+
+## Live Demo Version
+
+In my talks I gave on [NG-NL Conf](http://www.ng-nl.org/) and [AngularJS IL](https://www.youtube.com/watch?v=olxbXe-eL2o) I created a mini-me version of this project. You can check it out [here](https://github.com/ofirdagan/hangman-live-demo)
